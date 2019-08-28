@@ -40,10 +40,32 @@ function projPerpVector(u, v) {
  * @return {float} Angle between vectors ab and ac in degrees
  */
 function getAngle(a, b, c) {
-    //TODO: Fill this in for task 2
-    return -1; //This is a dummy value for now.  Replace with true angle
-}
 
+    let ab = vec3.create();
+    let ac = vec3.create();
+
+    vec3.subtract(ab, b, a);
+    vec3.subtract(ac, c, a);
+
+    abDotac = vec3.dot(ab,ac);
+
+    abMag = Math.sqrt(vec3.dot(ab, ab));
+    acMag = Math.sqrt(vec3.dot(ac, ac));
+
+    almostAngle = abDotac / (abMag * acMag);
+
+    if (almostAngle < -1) {
+        almostAngle = -1;
+    } else if (almostAngle > 1) {
+        almostAngle = 1;
+    }
+
+    angle = Math.acos(almostAngle);
+
+    angle = angle * (180/Math.PI);
+    
+    return angle; 
+}
 
 /**
  * Given three 3D vertices a, b, and c, compute the area 
