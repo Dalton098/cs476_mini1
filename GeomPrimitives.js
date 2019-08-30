@@ -15,7 +15,16 @@ vec3 = glMatrix.vec3;
  * @return {vec3} The projection of u onto v
  */
 function projVector(u, v) {
-    //TODO: Fill this in for task 1
+    uDotv = vec3.dot(u, v);
+    vDotv = vec3.dot(v, v);
+
+    projection = vec3.create();
+
+    scalar = uDotv / vDotv;
+
+    vec3.scale(projection, v, scalar);
+
+    return projection;
 }
 
 
@@ -27,7 +36,14 @@ function projVector(u, v) {
  * @return {vec3} The perpendicular projection of u onto v
  */
 function projPerpVector(u, v) {
-    //TODO: Fill this in for task 1
+
+    paraProjection = projVector(u, v);
+
+    perpProjection = vec3.create();
+
+    vec3.subtract(perpProjection, u, paraProjection);
+
+    return perpProjection;
 }
 
 
@@ -47,7 +63,7 @@ function getAngle(a, b, c) {
     vec3.subtract(ab, b, a);
     vec3.subtract(ac, c, a);
 
-    abDotac = vec3.dot(ab,ac);
+    abDotac = vec3.dot(ab, ac);
 
     abMag = Math.sqrt(vec3.dot(ab, ab));
     acMag = Math.sqrt(vec3.dot(ac, ac));
@@ -62,9 +78,9 @@ function getAngle(a, b, c) {
 
     angle = Math.acos(almostAngle);
 
-    angle = angle * (180/Math.PI);
-    
-    return angle; 
+    angle = angle * (180 / Math.PI);
+
+    return angle;
 }
 
 /**
@@ -77,8 +93,22 @@ function getAngle(a, b, c) {
  * @return {float} Area of the triangle
  */
 function getTriangleArea(a, b, c) {
-    //TODO: Fill this in for task 3
-    return -1; //This is a dummy value for now.  Replace with true area
+
+    let ab = vec3.create();
+    let ac = vec3.create();
+
+    vec3.subtract(ab, b, a);
+    vec3.subtract(ac, c, a);
+
+    crossProduct = vec3.create();
+
+    vec3.cross(crossProduct, ab, ac)
+
+    magCrossProduct = vec3.dot(crossProduct, crossProduct);
+
+    area = (1 / 2) * magCrossProduct;
+
+    return area;
 }
 
 /**
@@ -93,8 +123,30 @@ function getTriangleArea(a, b, c) {
  * @return {int} 1 if d is above, -1 if d is below, 0 if d is on
  */
 function getAboveOrBelow(a, b, c, d) {
-    //TODO: Fill this in for task 4
-    return 0; //This is a dummy value for now.  Replace with the actual indicator
+
+    let ab = vec3.create();
+    let ac = vec3.create();
+    let ad = vec3.create();
+
+    vec3.subtract(ab, b, a);
+    vec3.subtract(ac, c, a);
+    vec3.subtract(ad, d, a);
+
+    crossProduct = vec3.create();
+
+    vec3.cross(crossProduct, ab, ac)
+
+    product = vec3.dot(crossProduct, ad);
+
+    if (product < 0) {
+        toReturn = -1;
+    } else if (product > 0) {
+        toReturn = 1;
+    } else {
+        toReturn = 0;
+    }
+
+    return toReturn;
 }
 
 
@@ -118,28 +170,32 @@ function getAxesEqual(vs) {
     maxval = 0;
     for (var i = 0; i < vs.length; i++) {
         for (var j = 0; j < 3; j++) {
-            if (vs[i][j] < minval){ minval = vs[i][j]; }
-            if (vs[i][j] > maxval){ maxval = vs[i][j]; }
+            if (vs[i][j] < minval) { minval = vs[i][j]; }
+            if (vs[i][j] > maxval) { maxval = vs[i][j]; }
         }
     }
     return {
-    x:{ x: [minval, maxval], y: [0, 0], z: [0, 0],
-      mode: 'lines', line: {color: '#000000', width: 1}, type: 'scatter3d', name:'xaxis'
-    },
-    y:{ x: [0, 0], y: [minval, maxval], z: [0, 0],
-      mode: 'lines', line: {color: '#000000', width: 1}, type: 'scatter3d', name:'yaxis'
-    },
-    z:{ x: [0, 0], y: [0, 0], z: [minval, maxval],
-      mode: 'lines', line: {color: '#000000', width: 1}, type: 'scatter3d', name:'zaxis'
-    }};
+        x: {
+            x: [minval, maxval], y: [0, 0], z: [0, 0],
+            mode: 'lines', line: { color: '#000000', width: 1 }, type: 'scatter3d', name: 'xaxis'
+        },
+        y: {
+            x: [0, 0], y: [minval, maxval], z: [0, 0],
+            mode: 'lines', line: { color: '#000000', width: 1 }, type: 'scatter3d', name: 'yaxis'
+        },
+        z: {
+            x: [0, 0], y: [0, 0], z: [minval, maxval],
+            mode: 'lines', line: { color: '#000000', width: 1 }, type: 'scatter3d', name: 'zaxis'
+        }
+    };
 }
 
 function getMousePos(canvas, evt) {
-	var rect = canvas.getBoundingClientRect();
-	return {
-	    X: evt.clientX - rect.left,
-	    Y: evt.clientY - rect.top
-	};
+    var rect = canvas.getBoundingClientRect();
+    return {
+        X: evt.clientX - rect.left,
+        Y: evt.clientY - rect.top
+    };
 }
 
 
