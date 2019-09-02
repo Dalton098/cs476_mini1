@@ -104,7 +104,7 @@ function getTriangleArea(a, b, c) {
 
     vec3.cross(crossProduct, ab, ac)
 
-    magCrossProduct = vec3.dot(crossProduct, crossProduct);
+    magCrossProduct = Math.sqrt(vec3.dot(crossProduct, crossProduct));
 
     area = (1 / 2) * magCrossProduct;
 
@@ -136,11 +136,11 @@ function getAboveOrBelow(a, b, c, d) {
 
     vec3.cross(crossProduct, ab, ac)
 
-    product = vec3.dot(crossProduct, ad);
+    dotProduct = vec3.dot(crossProduct, ad);
 
-    if (product < 0) {
+    if (dotProduct < 0) {
         toReturn = -1;
-    } else if (product > 0) {
+    } else if (dotProduct > 0) {
         toReturn = 1;
     } else {
         toReturn = 0;
