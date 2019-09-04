@@ -42,6 +42,10 @@ function projVector(u, v) {
  */
 function projPerpVector(u, v) {
 
+    if (v[0] === 0 && v[1] === 0 && v[2] === 0) {
+        return vec3.fromValues(0,0,0);
+    }
+
     paraProjection = projVector(u, v);
 
     perpProjection = vec3.create();
@@ -67,6 +71,15 @@ function getAngle(a, b, c) {
 
     vec3.subtract(ab, b, a);
     vec3.subtract(ac, c, a);
+
+    if (ab[0] === 0 && ab[1] === 0 && ab[2] === 0) {
+        return -1;
+    }
+
+    if (ac[0] === 0 && ac[1] === 0 && ac[2] === 0) {
+        return -1;
+    }
+
 
     abDotac = vec3.dot(ab, ac);
 
@@ -128,6 +141,11 @@ function getTriangleArea(a, b, c) {
  * @return {int} 1 if d is above, -1 if d is below, 0 if d is on
  */
 function getAboveOrBelow(a, b, c, d) {
+
+    if( getTriangleArea(a, b, c) ===0 ) {
+        return -2;
+    }
+
 
     let ab = vec3.create();
     let ac = vec3.create();
