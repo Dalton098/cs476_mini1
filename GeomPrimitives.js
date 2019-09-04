@@ -15,6 +15,11 @@ vec3 = glMatrix.vec3;
  * @return {vec3} The projection of u onto v
  */
 function projVector(u, v) {
+
+    if (v[0] === 0 && v[1] === 0 && v[2] === 0) {
+        return vec3.fromValues(0,0,0);
+    }
+
     uDotv = vec3.dot(u, v);
     vDotv = vec3.dot(v, v);
 
